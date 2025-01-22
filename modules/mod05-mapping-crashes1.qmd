@@ -1,0 +1,125 @@
+---
+title: "5) Mapping Crashes I"
+---
+
+
+This module involves visualizing maps of crashes in California.
+
+This module follows the same exploratory "spirit" of the previous module, with
+the sole purpose of _getting to know the data_.
+
+```{r message=FALSE}
+# recommended packages
+library(tidyverse)
+library(lubridate)
+library(leaflet)
+```
+
+
+
+### Mapping Approaches
+
+We mainly consider web-interactive maps made with the `"leaflet"` package.
+
+Should we consider static maps (e.g. `"ggplot2"` & `"sf"`)?
+
+Ideas:
+
+- Plot crash locations, possibly filtering by:
+    + year
+    + month
+    + day
+    + type of violation
+    + _etc_
+
+- Plot crash locations, possibly color-coding by:
+    + type of collision
+    + collision severity
+    + _etc_
+
+- We can create choropleth maps
+
+- We can also color code based on proportions, and taken "region" into account
+(e.g. county, city, etc)
+
+
+## Example
+
+```r
+# quick & dirty import
+crashes = read_csv("crashes_2014_2023.csv")
+```
+
+```r
+# mapping crashes in October-2018
+crashes |> 
+  filter(ACCIDENT_YEAR == 2018) |> 
+  mutate(MONTH = month(COLLISION_DATE)) |> 
+  filter(MONTH == 10) |> 
+  leaflet() |> 
+  addTiles() |> 
+  addCircles(lng = ~POINT_X, 
+             lat = ~POINT_Y,
+             label = ~TYPE_OF_COLLISION)
+```
+
+```{r echo = FALSE}
+load("../data/crashes_oct_2018.RData")
+
+crashes_oct_2018 |> 
+  leaflet() |> 
+  addTiles() |> 
+  addCircles(lng = ~POINT_X, 
+             lat = ~POINT_Y,
+             label = ~TYPE_OF_COLLISION)
+```
+
+
+
+## Mapping Ideas
+
+Color code by `TYPE_OF_COLLISION`
+
+```r
+# create color palette
+collision_pal = colorFactor(
+  palette = "Set1",
+  domain = crashes$TYPE_OF_COLLISION)
+
+# mapping crashes in Alameda, Aug-Oct 2018
+crashes |> 
+  filter(ACCIDENT_YEAR == 2018) |> 
+  mutate(MONTH = month(COLLISION_DATE)) |> 
+  filter(MONTH %in% 8:12, COUNTY == "ALAMEDA") |> 
+  leaflet() |> 
+  addProviderTiles("CartoDB.Positron") |> 
+  addCircles(lng = ~POINT_X, 
+             lat = ~POINT_Y,
+             label = ~TYPE_OF_COLLISION,
+             color = ~collision_pal(TYPE_OF_COLLISION)) |> 
+  addLegend(position = "bottomleft",
+            pal = collision_pal, 
+            values = ~TYPE_OF_COLLISION)
+```
+
+```{r echo = FALSE}
+load("../data/crashes_alameda_aug_oct_2018.RData")
+
+collision_pal = colorFactor(
+  palette = "Set1",
+  domain = crashes_alameda_aug_oct_2018$TYPE_OF_COLLISION)
+
+# mapping crashes in Alameda, Aug-Oct 2018
+crashes_alameda_aug_oct_2018 |> 
+  leaflet() |> 
+  addProviderTiles("CartoDB.Positron") |> 
+  addCircles(lng = ~POINT_X, 
+             lat = ~POINT_Y,
+             label = ~TYPE_OF_COLLISION,
+             color = ~collision_pal(TYPE_OF_COLLISION)) |> 
+  addLegend(position = "bottomleft",
+            pal = collision_pal, 
+            values = ~TYPE_OF_COLLISION)
+```
+
+

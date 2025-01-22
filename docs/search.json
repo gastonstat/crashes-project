@@ -1,0 +1,308 @@
+[
+  {
+    "objectID": "modules/mod04-eda2.html",
+    "href": "modules/mod04-eda2.html",
+    "title": "4) EDA II",
+    "section": "",
+    "text": "This module involves a first exploratory analysis.\nThe idea is to have a first contact with the data.\n# recommended packages\nlibrary(tidyverse)\nlibrary(lubridate)",
+    "crumbs": [
+      "EDA",
+      "4) EDA II"
+    ]
+  },
+  {
+    "objectID": "modules/mod04-eda2.html#what-to-analyze",
+    "href": "modules/mod04-eda2.html#what-to-analyze",
+    "title": "4) EDA II",
+    "section": "What to Analyze?",
+    "text": "What to Analyze?\nHere are some EDA ideas.\n\nAccidents Per Year\nDistribution of crashes per year in California\n# Accident Year\ncrashes |&gt;\n  count(ACCIDENT_YEAR, name = \"count\") |&gt;\n  ggplot(aes(x = ACCIDENT_YEAR, y = count)) +\n  geom_col() +\n  scale_x_continuous(breaks = 2014:2023, labels = 14:23) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(title = \"Frequency of Crash Accidents (in CA) per Year\",\n       x = \"Accident Year\")\n\n\nAccidents Per Month\nDistribution of crashes per month in California\n# Accident Year\ncrashes |&gt;\n  mutate(MONTH = month(COLLISION_DATE)) |&gt;\n  count(MONTH, name = \"count\") |&gt;\n  ggplot(aes(x = MONTH, y = count)) +\n  geom_col() +\n  scale_x_continuous(breaks = 1:12, labels = 1:12) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(title = \"Frequency of Crash Accidents (in CA) per Month\",\n       subtitle = \"(2014 - 2023)\",\n       x = \"Month\")\n\n\nAccidents Per Month, Facets by Year\nDistribution of crashes per month in California\ncrashes |&gt;\n  mutate(MONTH = month(COLLISION_DATE)) |&gt;\n  count(ACCIDENT_YEAR, MONTH, name = \"count\") |&gt;\n  ggplot(aes(x = MONTH, y = count)) +\n  geom_col() +\n  scale_x_continuous(breaks = 1:12, labels = 1:12) +\n  facet_wrap(~ ACCIDENT_YEAR)",
+    "crumbs": [
+      "EDA",
+      "4) EDA II"
+    ]
+  },
+  {
+    "objectID": "modules/mod08-quarto-website2.html",
+    "href": "modules/mod08-quarto-website2.html",
+    "title": "8) Quarto Websites II",
+    "section": "",
+    "text": "In this module we continue describing more elements and uses of Quarto websites.",
+    "crumbs": [
+      "Reporting",
+      "8) Quarto Websites II"
+    ]
+  },
+  {
+    "objectID": "modules/mod08-quarto-website2.html#creating-a-personal-website",
+    "href": "modules/mod08-quarto-website2.html#creating-a-personal-website",
+    "title": "8) Quarto Websites II",
+    "section": "Creating a Personal Website",
+    "text": "Creating a Personal Website\nReminder: documentation about Quarto Websites is available in the followin link\nhttps://quarto.org/docs/websites/\nI want authors to have their own personal website. One option to have this type of website is by using a Quarto Website. To be more precise: it would be nice to have a so-called personal landing page.\n\nContent\nThe content of a personal website does not have to be extensive. In fact, it can be composed by a top navigation (navbar) menu with tabs:\n\nHome\nResume\nAbout\n\n\nHome\nThis is the landing page. It is a welcome page to tell the audience who you are, and what you do. I recommend using this page as the gallery to your personal portfolio of projects or creations.\n\n\nResume\nYou can have a dedicated tab for your resume, and possibly link it to your LinkedIn profile.\n\n\nAbout\nThis is a customary element of personal websites, in which you have a “Bio” page or more information about your career, interests, hobbies, etc.",
+    "crumbs": [
+      "Reporting",
+      "8) Quarto Websites II"
+    ]
+  },
+  {
+    "objectID": "modules/mod08-quarto-website2.html#activities",
+    "href": "modules/mod08-quarto-website2.html#activities",
+    "title": "8) Quarto Websites II",
+    "section": "Activities",
+    "text": "Activities\n\nCreate a Quarto Website for your Personal Website\nShow dummy version\nAdd a photo to your landing page\nList some projects or ideas for your portfolio\nDraft your resume in the Resume page\nDraft content for your About page\n\nExample of _quarto.yaml config file for a personal website:\nproject:\n  type: website\n\nwebsite:\n  title: \"First Last\"\n  navbar:\n    left:\n      - href: index.qmd\n        text: Home\n      - about.qmd\n      - resume.qmd\n\nformat:\n  html:\n    theme: zephyr\n    fontsize: 1em\n    css: styles.css\n    toc: true\nSample mock-up personal website:\n\nDemo: https://dataviz.quarto.pub/me/\nCode: https://github.com/gastonstat/quarto-pub-me/tree/main",
+    "crumbs": [
+      "Reporting",
+      "8) Quarto Websites II"
+    ]
+  },
+  {
+    "objectID": "modules/mod01-data.html",
+    "href": "modules/mod01-data.html",
+    "title": "1) Crash Data",
+    "section": "",
+    "text": "In this module we introduce the data for the project.",
+    "crumbs": [
+      "Data",
+      "1) Crash Data"
+    ]
+  },
+  {
+    "objectID": "modules/mod01-data.html#data-california-crash-data-2014-2023",
+    "href": "modules/mod01-data.html#data-california-crash-data-2014-2023",
+    "title": "1) Crash Data",
+    "section": "Data: California Crash Data (2014-2023)",
+    "text": "Data: California Crash Data (2014-2023)\nThe source of the data for this assignment is the Statewide Integrated Traffic Records System (SWITRS) which consists of data collected and maintained by the California Highway Patrol (CHP).\nSpecial thanks go to Amalia Stahl—from the Safe Transportation Research and Education Center (SafeTREC) at UC Berkeley—who provided the CSV files for this project.\n\nData File\nThe data is available in CSV format: crashes_2014_2023.csv\nSee Box folder.\n\n\n\n\nData Documentation\nBelow is the list of variables (i.e. fields, attributes) in the CSV file.\n\nCASE_ID:\n\nMeaning: Case Id\nDescription: The unique identifier of the crash case \n\nACCIDENT_YEAR:\n\nMeaning: Crash Year\nDescription: The year when the crash occurred\nValues: 2014 to 2023 \n\nCOLLISION_DATE:\n\nMeaning: Crash Date\nDescription: The date when the crash occurred (YYYYMMDD) \n\nCOLLISION_TIME:\n\nMeaning: Crash Time\nDescription: The time when the crash occurred in 24 hour military time \n\nDAY_OF_WEEK:\n\nMeaning: Day of Week\nDescription: The code for the day of the week when the crash occurred\nValues:\n\n1 - Monday\n2 - Tuesday\n3 - Wednesday\n…\n7 - Sunday \n\n\nWEATHER_1:\n\nMeaning: Weather 1\nDescription: Weather condition at the time of the crash\nValues:\n\nClear\nCloudy\nRaining\nSnowing\nFog\nOther\nWind\nUnknown \n\n\nWEATHER_2:\n\nMeaning: Weather 2\nDescription: Additional weather condition at the time of the crash\nValues: Same as Weather 1 above \n\nSTATE_HWY_IND:\n\nMeaning: State Highway Indicator\nDescription: A flag to indicate whether the crash is on or near a state highway.\nValues:\n\nYes\nNo\nUnknown \n\n\nCOLLISION_SEVERITY\n\nMeaning: Crash severity\nDescription: The worst injury suffered by any victim in the crash\nValues:\n\nFatal injury\nSevere injury\nMinor injury\nPossible injury\nNo injury \n\n\nNUMBER_KILLED\n\nMeaning: Killed Victims\nDescription: Number of killed victims\nValues: 0 to N for each crash \n\nNUMBER_INJURED\n\nMeaning: Injured Victims\nDescription: Number of injured victims\nValues: 0 to N for each crash \n\nPARTY_COUNT\n\nMeaning: Party count\nDescription: Number of parties involved in the crash. Note: a vehicle counts as one party regardless of the number of occupants.\nValues: 1 to N for each crash \n\nPCF_VIOL_CATEGORY:\n\nMeaning: PCF Violation Category\nDescription: A value computed from the law section that was given as the primary cause of the crash\nValues:\n\nDUI.\nImpeding traffic.\nUnsafe speed.\nFollowing too closely.\nWrong side of road.\nImproper passing.\nUnsafe lane change.\nImproper turning.\nAutomobile right of way.\nPedestrian right of way.\nPedestrian violation.\nTraffic signals and signs.\nHazardous parking.\nLights.\nBrakes.\nOther equipment.\nOther hazardous violation.\nOther than driver.\nUnsafe starting or backing.\nOther improper driving.\nPedestrian DUI.\nFell asleep.\nUnknown. \n\n\nTYPE_OF_COLLISION:\n\nMeaning: Type of crash\nDescription: The general type of crash as determined by the first injury or damage-causing event.\nValues:\n\nHead-on\nSideswipe\nRear End\nBroadside\nHit object\nOverturned\nVehicle/pedestrian\nOther\nUnknown \n\n\nROAD_SURFACE:\n\nMeaning: Road surface\nDescription: Roadway surface condition at the time of the crash in the traffic lane(s) involved.\nValues:\n\nDry\nWey\nSnowy or icy\nSlippery (muddy, oily)\nUnknown \n\n\nROAD_COND_1:\n\nMeaning: Road condition 1\nDescription: Roadway condition at the time of the crash in the traffic lane(s) involved.\nValues:\n\nHoles, deep ruts\nLoose material on roadway\nObstruction on roadway\nConstruction or repair zone\nReduced roadway width\nFlooded\nOther\nNo unusual condition\nUnknown \n\n\nROAD_COND_2:\n\nMeaning: Road condition 2\nDescription: Roadway condition at the time of the crash in the traffic lane(s) involved.\nValues: Same as road condition 1 above \n\nLIGHTING:\n\nMeaning: Lighting\nDescription: Lighting conditions at the crash location and the time of the crash.\nValues:\n\nDaylight\nDusk-dawn\nDark street lights\nDark no street lights\nDark street lights not working\nUnknown \n\n\nPEDESTRIAN_ACCIDENT:\n\nMeaning: Pedestrian crash\nDescription: Indicates whether the crash involved a pedestrian\nValues:\n\nYes\nNo \n\n\nBICYCLE_ACCIDENT:\n\nMeaning: Bicycle crash\nDescription: Indicates whether the crash involved a bicycle\nValues:\n\nYes\nNo \n\n\nMOTORCYCLE_ACCIDENT:\n\nMeaning: Motorcycle crash\nDescription: Indicates whether the crash involved a motorcycle\nValues:\n\nYes\nNo \n\n\nTRUCK_ACCIDENT:\n\nMeaning: Truck crash\nDescription: Indicates whether the crash involved a big truck\nValues:\n\nYes\nNo \n\n\nNOT_PRIVATE_PROPERTY:\n\nMeaning: Not Private property\nDescription: Indicates whether the crash did not occur on private property\nValues:\n\nYes\nNo \n\n\nALCOHOL_INVOLVED:\n\nMeaning: Alcohol involved\nDescription: Indicates whether the crash involved a party that had been drinking. Note: a passenger does not count as a party.\nValues:\n\nYes\nNo \n\n\nCOUNTY:\n\nMeaning: County\nDescription: County where the crash occurred. \n\nCITY:\n\nMeaning: City\nDescription: City where the crash occurred.\nValues: Various cities are simply labeled as “Unincorporated” \n\nPOINT_X:\n\nMeaning: X coordinate location\nDescription: The longitude of the geocoded location; uses the World Geodetic System from 1984 (WGS84) \n\nPOINT_Y:\n\nMeaning: Y coordinate location\nDescription: The latitude of the geocoded location; uses the World Geodetic System from 1984 (WGS84)\n\n\n\n\n\n\nFile Structure\nThe following diagram depicts a sample file structure for how we could organize the data files of this project:\ncalifornia-crashes/\n    data/\n        crashes_2014_2023.csv\n        data-preparation.R\n        ...\n    analysis/\n        eda-doc1.qmd\n        eda-doc2.qmd\n        ...\n\n\n\n\nImport CSV\nTo import the CSV file we can use read_csv()\nlibrary(tidyverse)\n\ncrashes = read_csv(\n  file = \"crashes_2014_2023.csv\", \n  col_types = list(\n    col_double(),    #  1) CASE_ID\n    col_double(),    #  2) ACCIDENT_YEAR\n    col_date(),      #  3) COLLISION_DATE \n    col_double(),    #  4) COLLISION_TIME \n    col_integer(),   #  5) DAY_OF_WEEK \n    col_character(), #  6) WEATHER_1 \n    col_character(), #  7) WEATHER_2 \n    col_character(), #  8) STATE_HWY_IND\n    col_character(), #  9) COLLISION_SEVERITY \n    col_integer(),   # 10) NUMBER_KILLED \n    col_integer(),   # 11) NUMBER_INJURED \n    col_integer(),   # 12) PARTY_COUNT \n    col_character(), # 13) PCF_VIOL_CATEGORY \n    col_character(), # 14) TYPE_OF_COLLISION \n    col_character(), # 15) ROAD_SURFACE \n    col_character(), # 16) ROAD_COND_1 \n    col_character(), # 17) ROAD_COND_2 \n    col_character(), # 18) LIGHTING \n    col_character(), # 19) PEDESTRIAN_ACCIDENT \n    col_character(), # 20) BICYCLE_ACCIDENT \n    col_character(), # 21) MOTORCYCLE_ACCIDENT \n    col_character(), # 22) TRUCK_ACCIDENT \n    col_character(), # 23) NOT_PRIVATE_PROPERTY \n    col_character(), # 24) ALCOHOL_INVOLVED \n    col_character(), # 25) COUNTY \n    col_character(), # 26) CITY \n    col_double(),    # 27) POINT_X \n    col_double()     # 28) POINT_Y \n  ))\n\n\nComments\nWe should we derive other variables (may need to use \"lubridate\" package)\n\nMONTH: extract month from COLLISION_DATE\nHOUR: extract hour from COLLISION_TIME",
+    "crumbs": [
+      "Data",
+      "1) Crash Data"
+    ]
+  },
+  {
+    "objectID": "modules/mod07-quarto-website1.html",
+    "href": "modules/mod07-quarto-website1.html",
+    "title": "7) Quarto Websites I",
+    "section": "",
+    "text": "To report and communicate the work done in this project, we’ll use a website created with Quarto Websites, and published to Quarto Pub.\nThe goal of this module is to provide a brief introduction to Quarto Websites. More specifically, the idea is to:",
+    "crumbs": [
+      "Reporting",
+      "7) Quarto Websites I"
+    ]
+  },
+  {
+    "objectID": "modules/mod07-quarto-website1.html#creating-a-quarto-website",
+    "href": "modules/mod07-quarto-website1.html#creating-a-quarto-website",
+    "title": "7) Quarto Websites I",
+    "section": "Creating a Quarto Website",
+    "text": "Creating a Quarto Website\nQuarto Websites are a convenient way to publish the work done in this project.\nhttps://quarto.org/docs/websites/\n\nQuick Start\nTo create the website we’ll use a website project within RStudio. Follow the Quick Start below to read about this topic.\nhttps://quarto.org/docs/websites/#quick-start\n\n\nMain Workflow\n\nCreate a Quarto website (through an RStudio project)\nEdit the website\n\nadd files\nedit content of files\nhandle the file structure of the website\n\nPreview and/or Render the website\nOptional: Publish the website\nRepeat steps 2-4 as necessary\n\n\nWebsite Preview\nTo preview a website, use the quarto preview command, which will render and run the website into in your browser or in an embedded window.\n\n\nTerminal\n\n# preview the website in the project directory\nquarto preview\n\n\n\nWebsite Render\nTo render (but not preview) a website, use the quarto render command, which will render the website into the _site directory by default:\n\n\nTerminal\n\n# render the website in the project directory\nquarto render",
+    "crumbs": [
+      "Reporting",
+      "7) Quarto Websites I"
+    ]
+  },
+  {
+    "objectID": "modules/mod07-quarto-website1.html#website-navigation",
+    "href": "modules/mod07-quarto-website1.html#website-navigation",
+    "title": "7) Quarto Websites I",
+    "section": "Website Navigation",
+    "text": "Website Navigation\nTo learn about the various ways to add navigation to a website, including top-level navigation bars, sidebars, or hybrid designs that uses both, see the following link:\nhttps://quarto.org/docs/websites/website-navigation.html\n\nTop Navigation\nYou can use a top navigation (a navbar) with optional sub-menus.\nhttps://quarto.org/docs/websites/website-navigation.html#top-navigation\nTo add top-navigation to a website, add a navbar entry to the website config in _quarto.yml. For example, the following YAML:\nwebsite:\n  navbar:\n    background: primary\n    search: true\n    left:\n      - text: \"Home\"\n        href: index.qmd\n      - talks.qmd\n      - about.qmd \n\n\nSide Navigation\nIf your site consists of more than a handful of documents, you might prefer to use side navigation, which enables you to display an arbitrarily deep hierarchy of articles.\nwebsite:\n  sidebar:\n    style: \"docked\"\n    search: true\n    contents:\n      - text: \"Introduction\"\n        href: introduction.qmd\n      - section: \"Tropical Cyclones\"\n        contents:\n          - tropical-cyclones1.qmd\n          - tropical-cyclones2.qmd\n      - section: \"Data\"\n        contents:\n          - ibtracs1.qmd\n          - ibtracs2.qmd\n      - section: \"Analysis\"\n        contents:\n          - analysis1.qmd\n          - analysis2.qmd\n      - acknowlegment.qmd",
+    "crumbs": [
+      "Reporting",
+      "7) Quarto Websites I"
+    ]
+  },
+  {
+    "objectID": "modules/mod07-quarto-website1.html#activities",
+    "href": "modules/mod07-quarto-website1.html#activities",
+    "title": "7) Quarto Websites I",
+    "section": "Activities",
+    "text": "Activities\n\nCreate a Quarto Website (using default settings)\n\nInspect the content of the website\n\nExamples of websites:\n\nPersonal (landing page)\nBlog\nBook\nProject\n\nCreate another basic website: e.g. minimalist project version\n\nAdd files\nAdd code\nAdd images\n\nNavigation options:\n\nTop Navigation\nSide Navigation\nTop-and-Side Navigation",
+    "crumbs": [
+      "Reporting",
+      "7) Quarto Websites I"
+    ]
+  },
+  {
+    "objectID": "modules/mod02-questions.html",
+    "href": "modules/mod02-questions.html",
+    "title": "2) Questions",
+    "section": "",
+    "text": "The following are some questions we could confront in our project:",
+    "crumbs": [
+      "Data",
+      "2) Questions"
+    ]
+  },
+  {
+    "objectID": "modules/mod02-questions.html#news-articles",
+    "href": "modules/mod02-questions.html#news-articles",
+    "title": "2) Questions",
+    "section": "News Articles",
+    "text": "News Articles\nThe Independent: This tiny coastal California city is the DUI capital of the state\nhttps://www.independent.co.uk/news/world/americas/crime/california-dui-laguna-beach-drunk-driving-b2672146.html\n\nA picturesque seven-mile stretch running along the Pacific Ocean in California harbors a dark secret: it’s the drunk driving capital of the Golden State.",
+    "crumbs": [
+      "Data",
+      "2) Questions"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This website is maintained by Gaston Sanchez to keep track of a side project analyzing Crashes in California.",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Crashes in California",
+    "section": "",
+    "text": "This is the companion website to document and track carrying out a data analysis project on Crashes in California.\nThe main goal visualize and compare crash data across California using:\n\nSummaries\nFrequencies\nTrends\nMaps\n\n\n\n\nData\n\nCrash Data\nQuestions\n\n\n\nExploratory Data Analysis (EDA)\n\nEDA I\nEDA II\n\n\n\nMaps\n\nMapping Crashes I\nMapping Crashes II",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "modules/mod05-mapping-crashes1.html",
+    "href": "modules/mod05-mapping-crashes1.html",
+    "title": "5) Mapping Crashes I",
+    "section": "",
+    "text": "This module involves visualizing maps of crashes in California.\nThis module follows the same exploratory “spirit” of the previous module, with the sole purpose of getting to know the data.\n# recommended packages\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(leaflet)",
+    "crumbs": [
+      "Maps",
+      "5) Mapping Crashes I"
+    ]
+  },
+  {
+    "objectID": "modules/mod05-mapping-crashes1.html#example",
+    "href": "modules/mod05-mapping-crashes1.html#example",
+    "title": "5) Mapping Crashes I",
+    "section": "Example",
+    "text": "Example\n# quick & dirty import\ncrashes = read_csv(\"crashes_2014_2023.csv\")\n# mapping crashes in October-2018\ncrashes |&gt; \n  filter(ACCIDENT_YEAR == 2018) |&gt; \n  mutate(MONTH = month(COLLISION_DATE)) |&gt; \n  filter(MONTH == 10) |&gt; \n  leaflet() |&gt; \n  addTiles() |&gt; \n  addCircles(lng = ~POINT_X, \n             lat = ~POINT_Y,\n             label = ~TYPE_OF_COLLISION)",
+    "crumbs": [
+      "Maps",
+      "5) Mapping Crashes I"
+    ]
+  },
+  {
+    "objectID": "modules/mod05-mapping-crashes1.html#mapping-ideas",
+    "href": "modules/mod05-mapping-crashes1.html#mapping-ideas",
+    "title": "5) Mapping Crashes I",
+    "section": "Mapping Ideas",
+    "text": "Mapping Ideas\nColor code by TYPE_OF_COLLISION\n# create color palette\ncollision_pal = colorFactor(\n  palette = \"Set1\",\n  domain = crashes$TYPE_OF_COLLISION)\n\n# mapping crashes in Alameda, Aug-Oct 2018\ncrashes |&gt; \n  filter(ACCIDENT_YEAR == 2018) |&gt; \n  mutate(MONTH = month(COLLISION_DATE)) |&gt; \n  filter(MONTH %in% 8:12, COUNTY == \"ALAMEDA\") |&gt; \n  leaflet() |&gt; \n  addProviderTiles(\"CartoDB.Positron\") |&gt; \n  addCircles(lng = ~POINT_X, \n             lat = ~POINT_Y,\n             label = ~TYPE_OF_COLLISION,\n             color = ~collision_pal(TYPE_OF_COLLISION)) |&gt; \n  addLegend(position = \"bottomleft\",\n            pal = collision_pal, \n            values = ~TYPE_OF_COLLISION)",
+    "crumbs": [
+      "Maps",
+      "5) Mapping Crashes I"
+    ]
+  },
+  {
+    "objectID": "modules/mod03-eda1.html",
+    "href": "modules/mod03-eda1.html",
+    "title": "3) EDA I",
+    "section": "",
+    "text": "This module involves a first exploratory analysis.\nThe idea is to have a first contact with the data.\n# recommended packages\nlibrary(tidyverse)\nlibrary(lubridate)",
+    "crumbs": [
+      "EDA",
+      "3) EDA I"
+    ]
+  },
+  {
+    "objectID": "modules/mod03-eda1.html#what-to-analyze",
+    "href": "modules/mod03-eda1.html#what-to-analyze",
+    "title": "3) EDA I",
+    "section": "What to Analyze?",
+    "text": "What to Analyze?\nHere are some EDA ideas.\n\nAccidents Per Year\nDistribution of crashes per year in California\n# Accident Year\ncrashes |&gt;\n  count(ACCIDENT_YEAR, name = \"count\") |&gt;\n  ggplot(aes(x = ACCIDENT_YEAR, y = count)) +\n  geom_col() +\n  scale_x_continuous(breaks = 2014:2023, labels = 14:23) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(title = \"Frequency of Crash Accidents (in CA) per Year\",\n       x = \"Accident Year\")\n\n\nAccidents Per Month\nDistribution of crashes per month in California\n# Accident Year\ncrashes |&gt;\n  mutate(MONTH = month(COLLISION_DATE)) |&gt;\n  count(MONTH, name = \"count\") |&gt;\n  ggplot(aes(x = MONTH, y = count)) +\n  geom_col() +\n  scale_x_continuous(breaks = 1:12, labels = 1:12) +\n  scale_y_continuous(labels = scales::comma) +\n  labs(title = \"Frequency of Crash Accidents (in CA) per Month\",\n       subtitle = \"(2014 - 2023)\",\n       x = \"Month\")\n\n\nAccidents Per Month, Facets by Year\nDistribution of crashes per month in California\ncrashes |&gt;\n  mutate(MONTH = month(COLLISION_DATE)) |&gt;\n  count(ACCIDENT_YEAR, MONTH, name = \"count\") |&gt;\n  ggplot(aes(x = MONTH, y = count)) +\n  geom_col() +\n  scale_x_continuous(breaks = 1:12, labels = 1:12) +\n  facet_wrap(~ ACCIDENT_YEAR)",
+    "crumbs": [
+      "EDA",
+      "3) EDA I"
+    ]
+  },
+  {
+    "objectID": "modules/mod06-mapping-crashes2.html",
+    "href": "modules/mod06-mapping-crashes2.html",
+    "title": "6) Mapping Crashes II",
+    "section": "",
+    "text": "In this module we continue visualizing maps of crashes in California.\n# recommended packages\nlibrary(tidyverse)  # data wrangling and graphics\nlibrary(lubridate)  # for working with dates\nlibrary(sf)         # for working with geospatial vector-data\nlibrary(maps)       # has database of U.S. Counties\nlibrary(leaflet)    # web interactive maps",
+    "crumbs": [
+      "Maps",
+      "6) Mapping Crashes II"
+    ]
+  },
+  {
+    "objectID": "modules/mod06-mapping-crashes2.html#choropleth-maps",
+    "href": "modules/mod06-mapping-crashes2.html#choropleth-maps",
+    "title": "6) Mapping Crashes II",
+    "section": "Choropleth Maps",
+    "text": "Choropleth Maps\nWe mainly consider web-interactive maps made with the \"leaflet\" package.\nIn particular, the idea is to create choropleth maps. One option is to color code based on proportions, and taken “region” into account (e.g. county, city, etc)",
+    "crumbs": [
+      "Maps",
+      "6) Mapping Crashes II"
+    ]
+  },
+  {
+    "objectID": "modules/mod06-mapping-crashes2.html#map-of-california-counties",
+    "href": "modules/mod06-mapping-crashes2.html#map-of-california-counties",
+    "title": "6) Mapping Crashes II",
+    "section": "Map of California Counties",
+    "text": "Map of California Counties\nTo plot the polygons of California counties, we need the corresponding polygon data set. The \"maps\" package has a \"county\" data (with polygons of U.S. counties) that can be converted to a simple features (“sf”) object via st_as_sf().\nTo graph polygons onto a leaflet map, we have to st_transform() the \"sf\" object to CRS = 4326 (coordinate reference system), otherwise leaflet will provide an annoying warning.\n\n# polygons of California counties from \"maps\" package\n# converted into an \"sf\" (simple features) object\nus_counties_sf = st_as_sf(map(\"county\", plot = FALSE, fill = TRUE)) \n\n# filtering counties in California\n# transform to CRS = 4326 to prevent warning when using leaflet\ncal_counties = us_counties_sf |&gt; \n  st_transform(crs = 4326) |&gt; \n  filter(str_detect(ID, \"^california\")) |&gt; \n  mutate(county = str_remove(ID, \"^california,\"))\n\nAs a sanity check, we can plot maps with either \"ggplot2\" or \"leaflet\"\n\n# sanity check: make sure map of CA is okay\nggplot() +\n  geom_sf(data = cal_counties)\n\n\n\n\n\n\n\n# sanity check: make sure leaflet map is okay\ncal_counties |&gt; \n  leaflet() |&gt; \n  addTiles() |&gt; \n  addPolygons()",
+    "crumbs": [
+      "Maps",
+      "6) Mapping Crashes II"
+    ]
+  },
+  {
+    "objectID": "modules/mod06-mapping-crashes2.html#example",
+    "href": "modules/mod06-mapping-crashes2.html#example",
+    "title": "6) Mapping Crashes II",
+    "section": "Example",
+    "text": "Example\nHere’s an example of a choropleth map to visualize the proportion of DUI crashes in 2018\n# quick & dirty import\ncrashes = read_csv(\"crashes_2014_2023.csv\")\n\ncrashes_total_2018_by_county = crashes |&gt; \n  filter(ACCIDENT_YEAR == 2018) |&gt; \n  group_by(COUNTY) |&gt; \n  count(COUNTY, name = \"total\")\n\ncrashes_dui_2018_by_county = crashes |&gt; \n  filter(ACCIDENT_YEAR == 2018, PCF_VIOL_CATEGORY == \"DUI\") |&gt; \n  group_by(COUNTY) |&gt; \n  count(COUNTY, name = \"dui\")\n  \ndui_2018_by_county = crashes_dui_2018_by_county |&gt; \n  inner_join(crashes_total_2018_by_county, by = \"COUNTY\") |&gt; \n  mutate(prop = dui / total,\n         county = str_to_lower(COUNTY))\n\n# color palette\npal &lt;- colorNumeric(\n  palette = \"viridis\",\n  domain = c(0, unique(dui_2018_by_county$prop)),\n  reverse = TRUE)\n\n# leaflet choropleth map\ncal_counties |&gt; \n  inner_join(dui_2018_by_county, by = \"county\") |&gt; \n  leaflet() |&gt; \n  addProviderTiles(\"CartoDB.Positron\") |&gt; \n  addPolygons(color = ~pal(prop),\n              fillOpacity = 0.7,\n              weight = 1,\n              label = ~county) |&gt; \n  addLegend(position = \"bottomleft\", \n            pal = pal,\n            values = ~prop,\n            title = \"DUI Prop\",\n            opacity = 1)",
+    "crumbs": [
+      "Maps",
+      "6) Mapping Crashes II"
+    ]
+  },
+  {
+    "objectID": "modules/mod09-closeread-docs1.html",
+    "href": "modules/mod09-closeread-docs1.html",
+    "title": "9) Closeread Docs I",
+    "section": "",
+    "text": "In addition to using a Quarto Website for reporting and communication purposes, it would also be nice to utilize Closeread, a Quarto extension to create scrollytelling stories with HTML documents.\nThe official website of Closeread is:  https://closeread.dev\nA companion website to learn Closeread is:  https://www.gastonsanchez.com/learn-closeread/",
+    "crumbs": [
+      "Reporting",
+      "9) Closeread Docs I"
+    ]
+  },
+  {
+    "objectID": "modules/mod09-closeread-docs1.html#examples",
+    "href": "modules/mod09-closeread-docs1.html#examples",
+    "title": "9) Closeread Docs I",
+    "section": "Examples",
+    "text": "Examples\nNumber of tropical cyclones in the North Atlantic, 1980-2022\nhttps://www.gastonsanchez.com/learn-closeread/examples/example7\n\n\nMapping Storms in the North Atlantic, 1980-2022\nhttps://www.gastonsanchez.com/learn-closeread/examples/example9",
+    "crumbs": [
+      "Reporting",
+      "9) Closeread Docs I"
+    ]
+  },
+  {
+    "objectID": "modules/mod09-closeread-docs1.html#creating-a-closeread-document",
+    "href": "modules/mod09-closeread-docs1.html#creating-a-closeread-document",
+    "title": "9) Closeread Docs I",
+    "section": "Creating a Closeread Document",
+    "text": "Creating a Closeread Document\nFirst contact with Closeread Docs\n\nIntroduction:  https://www.gastonsanchez.com/learn-closeread/modules/02-introduction.html\nMinimal Closeread with Text:  https://www.gastonsanchez.com/learn-closeread/modules/03-intro-text.html\nMinimal Closeread with Images:  https://www.gastonsanchez.com/learn-closeread/modules/04-intro-images.html",
+    "crumbs": [
+      "Reporting",
+      "9) Closeread Docs I"
+    ]
+  },
+  {
+    "objectID": "modules/mod10-closeread-docs2.html",
+    "href": "modules/mod10-closeread-docs2.html",
+    "title": "10) Closeread Docs II",
+    "section": "",
+    "text": "In this module we continue our discussion around Closeread documents.\nThis time, we’ll focus on how to tell a story based on tropical cyclones, which involves using R code, some graphics, and going through the design process of a scrollytelling document.",
+    "crumbs": [
+      "Reporting",
+      "10) Closeread Docs II"
+    ]
+  }
+]

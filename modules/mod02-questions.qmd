@@ -1,0 +1,52 @@
+---
+title: "2) Questions"
+---
+
+The following are some questions we could confront in our project:
+
+- When do the crashes occur?
+
+    + Year
+    + Month
+    + Day (of week)
+    + Hour (of day)
+    + Year & Month
+    + Year & Day
+    + Day & Hour
+    + Month & Hour
+    + _ect_
+
+- What time trends are present?
+
+    + Interesting trends, patterns
+
+- Why do the crashes occur: e.g. what is the traffic violation?
+
+  + Ranking Analysis: most common type of violation
+  + per year, per month, per day, per hour
+  + per county, per city
+
+- How do the crashes occur: e.g. what is the type of collision and collision severity?
+
+  + Ranking Analysis: most common type of collision
+  + Ranking Analysis: most common type of severity
+
+
+- Are there any associations/patterns: for example, what kind of party is involved?
+
+- What kind of crashes tend to occur in a certain geographic area?
+
+
+
+\
+
+
+## News Articles
+
+The Independent: This tiny coastal California city is the DUI capital of the state
+
+<https://www.independent.co.uk/news/world/americas/crime/california-dui-laguna-beach-drunk-driving-b2672146.html>
+
+> A picturesque seven-mile stretch running along the Pacific Ocean in California 
+> harbors a dark secret: it’s the drunk driving capital of the Golden State.
+

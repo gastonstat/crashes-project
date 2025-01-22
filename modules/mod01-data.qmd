@@ -1,0 +1,322 @@
+---
+title: "1) Crash Data"
+---
+
+In this module we introduce the data for the project.
+
+
+## Data: California Crash Data (2014-2023)
+
+The source of the data for this assignment is the
+__Statewide Integrated Traffic Records System__ (SWITRS) which consists of data
+collected and maintained by the _California Highway Patrol_ (CHP).
+
+Special thanks go to Amalia Stahl---from the _Safe Transportation Research and Education Center_ (SafeTREC) at UC Berkeley---who provided the CSV files for this project.
+
+
+### Data File
+
+The data is available in CSV format: `crashes_2014_2023.csv`
+
+See Box folder.
+
+\
+
+### Data Documentation
+
+Below is the list of variables (i.e. fields, attributes) in the CSV file.
+
+- `CASE_ID`: 
+    + __Meaning__: Case Id
+    + __Description__: The unique identifier of the crash case
+<br><br>
+- `ACCIDENT_YEAR`:
+    + __Meaning__: Crash Year
+    + __Description__: The year when the crash occurred
+    + __Values__: 2014 to 2023
+<br><br>
+- `COLLISION_DATE`:
+    + __Meaning__: Crash Date
+    + __Description__: The date when the crash occurred (YYYYMMDD)
+<br><br>
+- `COLLISION_TIME`:
+    + __Meaning__: Crash Time
+    + __Description__: The time when the crash occurred in 24 hour military time 
+<br><br>
+- `DAY_OF_WEEK`:
+    + __Meaning__: Day of Week
+    + __Description__: The code for the day of the week when the crash occurred
+    + __Values__: 
+        + 1 - Monday 
+        + 2 - Tuesday
+        + 3 - Wednesday
+        + ...
+        + 7 - Sunday
+<br><br>
+- `WEATHER_1`:
+    + __Meaning__: Weather 1
+    + __Description__: Weather condition at the time of the crash
+    + __Values__: 
+        + Clear
+        + Cloudy
+        + Raining
+        + Snowing
+        + Fog
+        + Other
+        + Wind
+        + Unknown
+<br><br>
+- `WEATHER_2`:
+    + __Meaning__: Weather 2
+    + __Description__: Additional weather condition at the time of the crash
+    + __Values__: Same as Weather 1 above
+<br><br>
+- `STATE_HWY_IND`:
+    + __Meaning__: State Highway Indicator
+    + __Description__: A flag to indicate whether the crash is on or near a state highway.
+    + __Values__:
+        + Yes
+        + No
+        + Unknown
+<br><br>
+- `COLLISION_SEVERITY`
+    + __Meaning__: Crash severity
+    + __Description__: The worst injury suffered by any victim in the crash
+    + __Values__:
+        + Fatal injury
+        + Severe injury
+        + Minor injury
+        + Possible injury
+        + No injury
+<br><br>
+- `NUMBER_KILLED`
+    + __Meaning__: Killed Victims
+    + __Description__: Number of killed victims
+    + __Values__: 0 to N for each crash
+<br><br>
+- `NUMBER_INJURED`
+    + __Meaning__: Injured Victims
+    + __Description__: Number of injured victims
+    + __Values__: 0 to N for each crash
+<br><br>
+- `PARTY_COUNT`
+    + __Meaning__: Party count
+    + __Description__: Number of parties involved in the crash. Note: a vehicle counts as one party regardless of the number of occupants.
+    + __Values__: 1 to N for each crash
+<br><br>
+- `PCF_VIOL_CATEGORY`:
+    + __Meaning__: PCF Violation Category
+    + __Description__: A value computed from the law section that was given as the primary cause of the crash
+    + __Values__: 
+        + DUI.
+        + Impeding traffic.
+        + Unsafe speed.
+        + Following too closely.
+        + Wrong side of road.
+        + Improper passing.
+        + Unsafe lane change.
+        + Improper turning.
+        + Automobile right of way.
+        + Pedestrian right of way.
+        + Pedestrian violation.
+        + Traffic signals and signs.
+        + Hazardous parking.
+        + Lights.
+        + Brakes.
+        + Other equipment.
+        + Other hazardous violation.
+        + Other than driver.
+        + Unsafe starting or backing.
+        + Other improper driving.
+        + Pedestrian DUI.
+        + Fell asleep.
+        + Unknown.
+<br><br>
+- `TYPE_OF_COLLISION`:
+    + __Meaning__: Type of crash
+    + __Description__: The general type of crash as determined by the first injury or damage-causing event.
+    + __Values__: 
+        + Head-on
+        + Sideswipe
+        + Rear End
+        + Broadside
+        + Hit object
+        + Overturned
+        + Vehicle/pedestrian
+        + Other
+        + Unknown
+<br><br>
+- `ROAD_SURFACE`:
+    + __Meaning__: Road surface
+    + __Description__: Roadway surface condition at the time of the crash in the traffic lane(s) involved.
+    + __Values__: 
+        + Dry
+        + Wey
+        + Snowy or icy
+        + Slippery (muddy, oily)
+        + Unknown
+<br><br>
+- `ROAD_COND_1`:
+    + __Meaning__: Road condition 1
+    + __Description__: Roadway condition at the time of the crash in the traffic lane(s) involved.
+    + __Values__: 
+        + Holes, deep ruts
+        + Loose material on roadway
+        + Obstruction on roadway
+        + Construction or repair zone
+        + Reduced roadway width
+        + Flooded
+        + Other
+        + No unusual condition
+        + Unknown
+<br><br>
+- `ROAD_COND_2`:
+    + __Meaning__: Road condition 2
+    + __Description__: Roadway condition at the time of the crash in the traffic lane(s) involved.
+    + __Values__: Same as road condition 1 above
+<br><br>
+- `LIGHTING`:
+    + __Meaning__: Lighting
+    + __Description__: Lighting conditions at the crash location and the time of the crash.
+    + __Values__: 
+        + Daylight
+        + Dusk-dawn
+        + Dark street lights
+        + Dark no street lights
+        + Dark street lights not working
+        + Unknown
+<br><br>
+- `PEDESTRIAN_ACCIDENT`:
+    + __Meaning__: Pedestrian crash
+    + __Description__: Indicates whether the crash involved a pedestrian
+    + __Values__: 
+        + Yes
+        + No
+<br><br>
+- `BICYCLE_ACCIDENT`:
+    + __Meaning__: Bicycle crash
+    + __Description__: Indicates whether the crash involved a bicycle
+    + __Values__: 
+        + Yes
+        + No
+<br><br>
+- `MOTORCYCLE_ACCIDENT`:
+    + __Meaning__: Motorcycle crash
+    + __Description__: Indicates whether the crash involved a motorcycle
+    + __Values__: 
+        + Yes
+        + No
+<br><br>
+- `TRUCK_ACCIDENT`:
+    + __Meaning__: Truck crash
+    + __Description__: Indicates whether the crash involved a big truck
+    + __Values__: 
+        + Yes
+        + No
+<br><br>
+- `NOT_PRIVATE_PROPERTY`:
+    + __Meaning__: Not Private property
+    + __Description__: Indicates whether the crash did not occur on private property 
+    + __Values__: 
+        + Yes
+        + No
+<br><br>
+- `ALCOHOL_INVOLVED`:
+    + __Meaning__: Alcohol involved
+    + __Description__: Indicates whether the crash involved a party that had been drinking. Note: a passenger does not count as a party.
+    + __Values__: 
+        + Yes
+        + No
+<br><br>
+- `COUNTY`:
+    + __Meaning__: County
+    + __Description__: County where the crash occurred.
+<br><br>
+- `CITY`:
+    + __Meaning__: City
+    + __Description__: City where the crash occurred.
+    + __Values__: Various cities are simply labeled as "Unincorporated"
+<br><br>
+- `POINT_X`:
+    + __Meaning__: X coordinate location
+    + __Description__: The longitude of the geocoded location; uses the World Geodetic System from 1984 (WGS84)
+<br><br>
+- `POINT_Y`:
+    + __Meaning__: Y coordinate location
+    + __Description__: The latitude of the geocoded location; uses the World Geodetic System from 1984 (WGS84)
+
+        
+    
+\
+
+
+### File Structure
+
+The following diagram depicts a sample file structure for how we could organize 
+the data files of this project:
+
+```bash
+california-crashes/
+    data/
+        crashes_2014_2023.csv
+        data-preparation.R
+        ...
+    analysis/
+        eda-doc1.qmd
+        eda-doc2.qmd
+        ...
+```
+
+
+\
+
+
+### Import CSV
+
+To import the CSV file we can use `read_csv()`
+
+```r
+library(tidyverse)
+
+crashes = read_csv(
+  file = "crashes_2014_2023.csv", 
+  col_types = list(
+    col_double(),    #  1) CASE_ID
+    col_double(),    #  2) ACCIDENT_YEAR
+    col_date(),      #  3) COLLISION_DATE 
+    col_double(),    #  4) COLLISION_TIME 
+    col_integer(),   #  5) DAY_OF_WEEK 
+    col_character(), #  6) WEATHER_1 
+    col_character(), #  7) WEATHER_2 
+    col_character(), #  8) STATE_HWY_IND
+    col_character(), #  9) COLLISION_SEVERITY 
+    col_integer(),   # 10) NUMBER_KILLED 
+    col_integer(),   # 11) NUMBER_INJURED 
+    col_integer(),   # 12) PARTY_COUNT 
+    col_character(), # 13) PCF_VIOL_CATEGORY 
+    col_character(), # 14) TYPE_OF_COLLISION 
+    col_character(), # 15) ROAD_SURFACE 
+    col_character(), # 16) ROAD_COND_1 
+    col_character(), # 17) ROAD_COND_2 
+    col_character(), # 18) LIGHTING 
+    col_character(), # 19) PEDESTRIAN_ACCIDENT 
+    col_character(), # 20) BICYCLE_ACCIDENT 
+    col_character(), # 21) MOTORCYCLE_ACCIDENT 
+    col_character(), # 22) TRUCK_ACCIDENT 
+    col_character(), # 23) NOT_PRIVATE_PROPERTY 
+    col_character(), # 24) ALCOHOL_INVOLVED 
+    col_character(), # 25) COUNTY 
+    col_character(), # 26) CITY 
+    col_double(),    # 27) POINT_X 
+    col_double()     # 28) POINT_Y 
+  ))
+```
+
+
+### Comments
+
+We should we derive other variables (may need to use `"lubridate"` package)
+
++ `MONTH`: extract month from `COLLISION_DATE`
+
++ `HOUR`: extract hour from `COLLISION_TIME`

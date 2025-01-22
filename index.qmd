@@ -1,0 +1,39 @@
+---
+title: "Crashes in California"
+---
+
+This is the companion website to document and track carrying out a data analysis 
+project on Crashes in California.
+
+The main goal visualize and compare crash data across California using:
+
+- Summaries
+- Frequencies
+- Trends
+- Maps
+
+
+\
+
+
+### Data
+
+- [Crash Data](modules/mod01-data.html)   
+
+- [Questions](modules/mod02-questions.html)   
+
+
+### Exploratory Data Analysis (EDA)
+
+- [EDA I](modules/mod03-eda1.html)   
+
+- [EDA II](modules/mod04-eda2.html)   
+
+
+### Maps
+
+- [Mapping Crashes I](modules/mod05-mapping-crashes1.html)   
+
+- [Mapping Crashes II](modules/mod04-mapping-crashes2.html)   
+
+

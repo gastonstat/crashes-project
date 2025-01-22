@@ -1,0 +1,43 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  favicon: assets/favicon.ico
+  title: "stat199-crash-data"
+  sidebar:
+    title: "Crashes in California"
+    logo: "assets/crash-cartoon.jpg"
+    style: floating
+    contents:
+      - href: index.qmd
+        text: Home
+      - section: "Data"
+        contents: 
+        - modules/mod01-data.qmd
+        - modules/mod02-questions.qmd
+      - section: "EDA"
+        contents: 
+        - modules/mod03-eda1.qmd
+        - modules/mod04-eda2.qmd
+      - section: "Maps"
+        contents: 
+        - modules/mod05-mapping-crashes1.qmd
+        - modules/mod06-mapping-crashes2.qmd
+      - section: "Reporting"
+        contents: 
+        - modules/mod07-quarto-website1.qmd
+        - modules/mod08-quarto-website2.qmd
+        - modules/mod09-closeread-docs1.qmd
+        - modules/mod10-closeread-docs2.qmd
+      - about.qmd
+
+format:
+  html:
+    theme: cosmo
+    fontsize: 0.9em
+    css: styles.css
+    toc: true
+
+
+

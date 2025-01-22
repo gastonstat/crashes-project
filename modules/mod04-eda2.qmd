@@ -1,0 +1,72 @@
+---
+title: "4) EDA II"
+---
+
+This module involves a first exploratory analysis.
+
+The idea is to have a first contact with the data.
+
+```{r eval = FALSE}
+# recommended packages
+library(tidyverse)
+library(lubridate)
+```
+
+
+\
+
+
+## What to Analyze?
+
+Here are some EDA ideas.
+
+
+### Accidents Per Year
+
+Distribution of crashes per year in California
+
+```r
+# Accident Year
+crashes |>
+  count(ACCIDENT_YEAR, name = "count") |>
+  ggplot(aes(x = ACCIDENT_YEAR, y = count)) +
+  geom_col() +
+  scale_x_continuous(breaks = 2014:2023, labels = 14:23) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(title = "Frequency of Crash Accidents (in CA) per Year",
+       x = "Accident Year")
+```
+
+
+### Accidents Per Month
+
+Distribution of crashes per month in California
+
+```r
+# Accident Year
+crashes |>
+  mutate(MONTH = month(COLLISION_DATE)) |>
+  count(MONTH, name = "count") |>
+  ggplot(aes(x = MONTH, y = count)) +
+  geom_col() +
+  scale_x_continuous(breaks = 1:12, labels = 1:12) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(title = "Frequency of Crash Accidents (in CA) per Month",
+       subtitle = "(2014 - 2023)",
+       x = "Month")
+```
+
+
+### Accidents Per Month, Facets by Year
+
+Distribution of crashes per month in California
+
+```r
+crashes |>
+  mutate(MONTH = month(COLLISION_DATE)) |>
+  count(ACCIDENT_YEAR, MONTH, name = "count") |>
+  ggplot(aes(x = MONTH, y = count)) +
+  geom_col() +
+  scale_x_continuous(breaks = 1:12, labels = 1:12) +
+  facet_wrap(~ ACCIDENT_YEAR)
+```

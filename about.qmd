@@ -1,0 +1,6 @@
+---
+title: "About"
+---
+
+This website is maintained by <a href="https://www.gastonsanchez.com" target="_blank">Gaston Sanchez</a> to keep track of a side project analyzing 
+Crashes in California.

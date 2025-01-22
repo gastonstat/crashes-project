@@ -1,0 +1,138 @@
+---
+title: "6) Mapping Crashes II"
+---
+
+
+In this module we continue visualizing maps of crashes in California.
+
+```{r message=FALSE}
+# recommended packages
+library(tidyverse)  # data wrangling and graphics
+library(lubridate)  # for working with dates
+library(sf)         # for working with geospatial vector-data
+library(maps)       # has database of U.S. Counties
+library(leaflet)    # web interactive maps
+```
+
+
+
+## Choropleth Maps
+
+We mainly consider web-interactive maps made with the `"leaflet"` package.
+
+In particular, the idea is to create choropleth maps. One option is to color 
+code based on proportions, and taken "region" into account
+(e.g. county, city, etc)
+
+
+## Map of California Counties
+
+To plot the polygons of California counties, we need the corresponding polygon
+data set. The `"maps"` package has a `"county"` data (with polygons of U.S. 
+counties) that can be converted to a _simple features_ ("sf") object via 
+`st_as_sf()`.
+
+To graph polygons onto a leaflet map, we have to `st_transform()` the `"sf"` 
+object to CRS = 4326 (coordinate reference system), otherwise leaflet will
+provide an annoying warning.
+
+```{r cal_counties}
+# polygons of California counties from "maps" package
+# converted into an "sf" (simple features) object
+us_counties_sf = st_as_sf(map("county", plot = FALSE, fill = TRUE)) 
+
+# filtering counties in California
+# transform to CRS = 4326 to prevent warning when using leaflet
+cal_counties = us_counties_sf |> 
+  st_transform(crs = 4326) |> 
+  filter(str_detect(ID, "^california")) |> 
+  mutate(county = str_remove(ID, "^california,"))
+```
+
+As a sanity check, we can plot maps with either `"ggplot2"` or `"leaflet"`
+
+```{r sanity_check_maps}
+# sanity check: make sure map of CA is okay
+ggplot() +
+  geom_sf(data = cal_counties)
+
+# sanity check: make sure leaflet map is okay
+cal_counties |> 
+  leaflet() |> 
+  addTiles() |> 
+  addPolygons()
+```
+
+
+## Example
+
+Here's an example of a choropleth map to visualize the proportion of DUI
+crashes in 2018
+
+```r
+# quick & dirty import
+crashes = read_csv("crashes_2014_2023.csv")
+
+crashes_total_2018_by_county = crashes |> 
+  filter(ACCIDENT_YEAR == 2018) |> 
+  group_by(COUNTY) |> 
+  count(COUNTY, name = "total")
+
+crashes_dui_2018_by_county = crashes |> 
+  filter(ACCIDENT_YEAR == 2018, PCF_VIOL_CATEGORY == "DUI") |> 
+  group_by(COUNTY) |> 
+  count(COUNTY, name = "dui")
+  
+dui_2018_by_county = crashes_dui_2018_by_county |> 
+  inner_join(crashes_total_2018_by_county, by = "COUNTY") |> 
+  mutate(prop = dui / total,
+         county = str_to_lower(COUNTY))
+
+# color palette
+pal <- colorNumeric(
+  palette = "viridis",
+  domain = c(0, unique(dui_2018_by_county$prop)),
+  reverse = TRUE)
+
+# leaflet choropleth map
+cal_counties |> 
+  inner_join(dui_2018_by_county, by = "county") |> 
+  leaflet() |> 
+  addProviderTiles("CartoDB.Positron") |> 
+  addPolygons(color = ~pal(prop),
+              fillOpacity = 0.7,
+              weight = 1,
+              label = ~county) |> 
+  addLegend(position = "bottomleft", 
+            pal = pal,
+            values = ~prop,
+            title = "DUI Prop",
+            opacity = 1)
+```
+
+
+```{r echo = FALSE, leaflet_map}
+load("../data/choropleth-map-dui-2018.RData")
+
+pal <- colorNumeric(
+  palette = "viridis",
+  domain = c(0, unique(dui_2018_by_county$prop)),
+  reverse = TRUE)
+
+# leaflet choropleth map
+cal_counties |> 
+  inner_join(dui_2018_by_county, by = "county") |> 
+  leaflet() |> 
+  addProviderTiles("CartoDB.Positron") |> 
+  addPolygons(color = ~pal(prop),
+              fillOpacity = 0.7,
+              weight = 1,
+              label = ~county) |> 
+  addLegend(position = "bottomleft", 
+            pal = pal,
+            values = ~prop,
+            title = "DUI Prop",
+            opacity = 1)
+```
+
+
