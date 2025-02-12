@@ -24,6 +24,7 @@ website:
         contents: 
         - modules/mod05-mapping-crashes1.qmd
         - modules/mod06-mapping-crashes2.qmd
+        - modules/mod07-mapping-crashes3.qmd
       - section: "Reporting"
         contents: 
         - modules/mod07-quarto-website1.qmd
