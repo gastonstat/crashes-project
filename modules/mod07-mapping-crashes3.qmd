@@ -1,0 +1,107 @@
+---
+title: "7) Mapping Crashes III"
+---
+
+
+In this module we continue visualizing maps of crashes in California.
+
+```{r message=FALSE}
+# recommended packages
+library(tidyverse)  # data wrangling and graphics
+library(lubridate)  # for working with dates
+library(sf)         # for working with geospatial vector-data
+library(maps)       # has database of U.S. Counties
+library(leaflet)    # web interactive maps
+```
+
+
+
+## Choropleth Maps
+
+Similar to the choropleth maps by `COUNTY`, it would be interesting to produce maps
+by `CITY`. The issue is that we don't have polygons for the cities in California.
+
+However, we can use polygons from zip-code data in California: see shapefile
+`ZipCodes_-5351459964483019043`
+
+```{r eval = FALSE}
+# import shapefile of zip codes in California
+cal_zips = st_read(dsn = "../data/ZipCodes_-5351459964483019043/") |>
+  st_transform(crs = 4326)
+
+# fix some awkward polygons
+cal_zips_valid = st_make_valid(cal_zips)
+```
+
+
+Some details
+
+```{r eval = FALSE}
+# notice that we don't get the same number of rows
+nrow(crashes)         # original clean data
+nrow(crashes_sf)      # crash data converted to "sf" object
+nrow(crash_zipcodes)  # zip-code data
+
+
+# the issue is that we end up with duplicated id's
+# 67664 106608 395287
+yid = crash_zipcodes$CASE_ID
+which(duplicated(yid))
+yid[67664]  # 6542592
+yid[106608] # 6646180
+yid[395287] # 8138054
+```
+
+Getting rid of duplicated CASE_ID's:
+
+```{r eval = FALSE}
+# getting rid of duplicated CASE_ID's
+id_zip = tibble(
+  CASE_ID = crash_zipcodes$CASE_ID[-which(duplicated(yid))],
+  ZIP_CODE = crash_zipcodes$ZIP_CODE[-which(duplicated(yid))],
+  PO_NAME = crash_zipcodes$PO_NAME[-which(duplicated(yid))])
+
+# sanity check to make sure CASE_ID's are okay
+tibble(
+  id1 = crashes$CASE_ID,
+  id2 = id_zip$CASE_ID
+) |>
+  mutate(diff = id1 - id2) |>
+  filter(diff != 0)
+```
+
+
+## Merging crash data with zip-code (polygon) data
+
+```{r eval = FALSE}
+# adding columns ZIP_CODE and PO_NAME
+crashes_zip = inner_join(
+  crashes,
+  id_zip,
+  by = "CASE_ID")
+```
+
+
+Export it:
+
+```{r eval = FALSE}
+# export it
+write_csv(
+  x = crashes_zip,
+  file = "../data/crashes_california_zipcodes_2014_2023.csv")
+```
+
+
+
+## Choropleth Maps by City
+
+```{r eval = FALSE}
+crashes |> 
+  filter(ACCIDENT_YEAR == 2023,
+         PO_NAME == "Berkeley") |> 
+  leaflet() |> 
+  addProviderTiles("CartoDB.Positron") |> 
+  addCircles(lng = ~POINT_X,
+             lat = ~POINT_Y)
+```
+
