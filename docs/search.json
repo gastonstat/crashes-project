@@ -163,5 +163,15 @@
       "Reporting",
       "10) Closeread Docs II"
     ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Crashes in California",
+    "section": "",
+    "text": "This is the companion website to document and track carrying out a data analysis project on Crashes in California.\nThe main goal visualize and compare crash data across California using:\n\nSummaries\nFrequencies\nTrends\nMaps\n\n\n\n\nData\n\nCrash Data\nQuestions\n\n\n\nExploratory Data Analysis (EDA)\n\nEDA I\nEDA II\n\n\n\nMaps\n\nMapping Crashes I\nMapping Crashes II\nMapping Crashes III",
+    "crumbs": [
+      "Home"
+    ]
   }
 ]
