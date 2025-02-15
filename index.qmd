@@ -34,6 +34,7 @@ The main goal visualize and compare crash data across California using:
 
 - [Mapping Crashes I](modules/mod05-mapping-crashes1.html)   
 
-- [Mapping Crashes II](modules/mod04-mapping-crashes2.html)   
+- [Mapping Crashes II](modules/mod06-mapping-crashes2.html)   
 
+- [Mapping Crashes III](modules/mod07-mapping-crashes3.html)   
 
