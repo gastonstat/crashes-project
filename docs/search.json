@@ -173,5 +173,49 @@
     "crumbs": [
       "Home"
     ]
+  },
+  {
+    "objectID": "modules/mod07-mapping-crashes3.html",
+    "href": "modules/mod07-mapping-crashes3.html",
+    "title": "7) Mapping Crashes III",
+    "section": "",
+    "text": "In this module we continue visualizing maps of crashes in California.\n# recommended packages\nlibrary(tidyverse)  # data wrangling and graphics\nlibrary(lubridate)  # for working with dates\nlibrary(sf)         # for working with geospatial vector-data\nlibrary(leaflet)    # web interactive maps",
+    "crumbs": [
+      "Maps",
+      "7) Mapping Crashes III"
+    ]
+  },
+  {
+    "objectID": "modules/mod07-mapping-crashes3.html#choropleth-maps",
+    "href": "modules/mod07-mapping-crashes3.html#choropleth-maps",
+    "title": "7) Mapping Crashes III",
+    "section": "Choropleth Maps",
+    "text": "Choropleth Maps\n\n# quick & dirty import (crash data)\ncrashes = read_csv(\"../data/crashes_2014_2023.csv\")\n\nSimilar to the choropleth maps by COUNTY, it would be interesting to produce maps by CITY. The issue is that we don’t have polygons for the cities in California.\nHowever, we can use polygons from zip-code data in California: see shapefile ZipCodes_-5351459964483019043\n\n# import shapefile of zip codes in California\ncal_zips = st_read(dsn = \"../data/ZipCodes_-5351459964483019043/\") |&gt;\n  st_transform(crs = 4326)\n\n# fix some awkward polygons\ncal_zips_valid = st_make_valid(cal_zips)\n\nWith cal_zips_valid, we can plot polygons based on post offices PO_NAME\n\n# sanity check\ncal_zips_valid |&gt; \n  leaflet() |&gt; \n  addProviderTiles(\"CartoDB.Positron\") |&gt; \n  addPolygons(weight = 0.9, \n              label = ~PO_NAME)\n\n\nMerging Zip Code data with Crash data\n\n# step 1: convert crash data to \"sf\" object\ncrashes_sf &lt;- crashes |&gt; \n  st_as_sf(coords = c(\"POINT_X\", \"POINT_Y\"), crs = 4326)\n\n# step 2: merge crash data with zip codes \n# (this takes some time)\ncrash_zipcodes = crashes_sf |&gt; \n  st_join(cal_zips_valid)\n\n# notice that we don't get the same number of rows\nnrow(crashes)         # original crash data\nnrow(crashes_sf)      # crash data converted to \"sf\" object\nnrow(crash_zipcodes)  # zip-code data\n\n# step 3: getting rid of duplicated CASE_ID's\nyid = crash_zipcodes$CASE_ID\n\nid_zip = tibble(\n  CASE_ID = crash_zipcodes$CASE_ID[-which(duplicated(yid))],\n  ZIP_CODE = crash_zipcodes$ZIP_CODE[-which(duplicated(yid))],\n  PO_NAME = crash_zipcodes$PO_NAME[-which(duplicated(yid))])\n\n# step 3.1: sanity check to make sure CASE_ID's are okay\ntibble(\n  id1 = crashes$CASE_ID,\n  id2 = id_zip$CASE_ID\n) |&gt;\n  mutate(diff = id1 - id2) |&gt;\n  filter(diff != 0)",
+    "crumbs": [
+      "Maps",
+      "7) Mapping Crashes III"
+    ]
+  },
+  {
+    "objectID": "modules/mod07-mapping-crashes3.html#merging-crash-data-with-zip-code-polygon-data",
+    "href": "modules/mod07-mapping-crashes3.html#merging-crash-data-with-zip-code-polygon-data",
+    "title": "7) Mapping Crashes III",
+    "section": "Merging crash data with zip-code (polygon) data",
+    "text": "Merging crash data with zip-code (polygon) data\n\n# step 4: adding columns ZIP_CODE and PO_NAME\ncrashes_zip = inner_join(\n  crashes,\n  id_zip,\n  by = \"CASE_ID\")\n\nExport it:\n\n# export it\nwrite_csv(\n  x = crashes_zip,\n  file = \"../data/crashes_california_zipcodes_2014_2023.csv\")",
+    "crumbs": [
+      "Maps",
+      "7) Mapping Crashes III"
+    ]
+  },
+  {
+    "objectID": "modules/mod07-mapping-crashes3.html#choropleth-maps-by-po_name",
+    "href": "modules/mod07-mapping-crashes3.html#choropleth-maps-by-po_name",
+    "title": "7) Mapping Crashes III",
+    "section": "Choropleth Maps by PO_NAME",
+    "text": "Choropleth Maps by PO_NAME\nHere’s an example of a choropleth map to visualize the proportion of \"rear end\" collisions in each region (i.e. post office PO_NAME)\n\n# ============================================\n# choropleth map (by PO_NAME): crashes in 2023\n# ============================================\ntotal_crashes_per_region_2023 = crashes_zip |&gt; \n  filter(ACCIDENT_YEAR == 2023) |&gt; \n  count(PO_NAME, name = \"total\")\n\ncollision_type_per_region_2023 = crashes_zip |&gt; \n  filter(ACCIDENT_YEAR == 2023, \n         TYPE_OF_COLLISION == \"rear end\") |&gt; \n  count(PO_NAME, name = \"count\")\n\nprop_collision_type_per_region_2023 = total_crashes_per_region_2023 |&gt; \n  inner_join(collision_type_per_region_2023, by = \"PO_NAME\") |&gt; \n  mutate(prop = count / total)\n\n# colors\npal = colorNumeric(\n  palette = \"viridis\",\n  domain = prop_collision_type_per_region_2023$prop\n)\n\n# map\ncal_zips |&gt; \n  inner_join(prop_collision_type_per_region_2023, by = \"PO_NAME\") |&gt; \n  leaflet() |&gt; \n  addProviderTiles(\"CartoDB.Positron\") |&gt; \n  addPolygons(weight = 0.9, \n              label = ~PO_NAME,\n              color = ~pal(prop)) |&gt; \n  addLegend(\"bottomleft\", pal = pal, values = ~prop)",
+    "crumbs": [
+      "Maps",
+      "7) Mapping Crashes III"
+    ]
   }
 ]
