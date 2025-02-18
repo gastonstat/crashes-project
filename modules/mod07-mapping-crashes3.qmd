@@ -10,13 +10,16 @@ In this module we continue visualizing maps of crashes in California.
 library(tidyverse)  # data wrangling and graphics
 library(lubridate)  # for working with dates
 library(sf)         # for working with geospatial vector-data
-library(maps)       # has database of U.S. Counties
 library(leaflet)    # web interactive maps
 ```
 
 
-
 ## Choropleth Maps
+
+```{r eval = FALSE}
+# quick & dirty import (crash data)
+crashes = read_csv("../data/crashes_2014_2023.csv")
+```
 
 Similar to the choropleth maps by `COUNTY`, it would be interesting to produce maps
 by `CITY`. The issue is that we don't have polygons for the cities in California.
@@ -33,35 +36,44 @@ cal_zips = st_read(dsn = "../data/ZipCodes_-5351459964483019043/") |>
 cal_zips_valid = st_make_valid(cal_zips)
 ```
 
-
-Some details
+With `cal_zips_valid`, we can plot polygons based on post offices `PO_NAME`
 
 ```{r eval = FALSE}
+# sanity check
+cal_zips_valid |> 
+  leaflet() |> 
+  addProviderTiles("CartoDB.Positron") |> 
+  addPolygons(weight = 0.9, 
+              label = ~PO_NAME)
+```
+
+
+### Merging Zip Code data with Crash data
+
+```{r eval = FALSE}
+# step 1: convert crash data to "sf" object
+crashes_sf <- crashes |> 
+  st_as_sf(coords = c("POINT_X", "POINT_Y"), crs = 4326)
+
+# step 2: merge crash data with zip codes 
+# (this takes some time)
+crash_zipcodes = crashes_sf |> 
+  st_join(cal_zips_valid)
+
 # notice that we don't get the same number of rows
-nrow(crashes)         # original clean data
+nrow(crashes)         # original crash data
 nrow(crashes_sf)      # crash data converted to "sf" object
 nrow(crash_zipcodes)  # zip-code data
 
-
-# the issue is that we end up with duplicated id's
-# 67664 106608 395287
+# step 3: getting rid of duplicated CASE_ID's
 yid = crash_zipcodes$CASE_ID
-which(duplicated(yid))
-yid[67664]  # 6542592
-yid[106608] # 6646180
-yid[395287] # 8138054
-```
 
-Getting rid of duplicated CASE_ID's:
-
-```{r eval = FALSE}
-# getting rid of duplicated CASE_ID's
 id_zip = tibble(
   CASE_ID = crash_zipcodes$CASE_ID[-which(duplicated(yid))],
   ZIP_CODE = crash_zipcodes$ZIP_CODE[-which(duplicated(yid))],
   PO_NAME = crash_zipcodes$PO_NAME[-which(duplicated(yid))])
 
-# sanity check to make sure CASE_ID's are okay
+# step 3.1: sanity check to make sure CASE_ID's are okay
 tibble(
   id1 = crashes$CASE_ID,
   id2 = id_zip$CASE_ID
@@ -74,7 +86,7 @@ tibble(
 ## Merging crash data with zip-code (polygon) data
 
 ```{r eval = FALSE}
-# adding columns ZIP_CODE and PO_NAME
+# step 4: adding columns ZIP_CODE and PO_NAME
 crashes_zip = inner_join(
   crashes,
   id_zip,
@@ -93,15 +105,42 @@ write_csv(
 
 
 
-## Choropleth Maps by City
+## Choropleth Maps by PO_NAME
+
+Here's an example of a choropleth map to visualize the proportion of `"rear end"`
+collisions in each region (i.e. post office `PO_NAME`)
 
 ```{r eval = FALSE}
-crashes |> 
-  filter(ACCIDENT_YEAR == 2023,
-         PO_NAME == "Berkeley") |> 
+# ============================================
+# choropleth map (by PO_NAME): crashes in 2023
+# ============================================
+total_crashes_per_region_2023 = crashes_zip |> 
+  filter(ACCIDENT_YEAR == 2023) |> 
+  count(PO_NAME, name = "total")
+
+collision_type_per_region_2023 = crashes_zip |> 
+  filter(ACCIDENT_YEAR == 2023, 
+         TYPE_OF_COLLISION == "rear end") |> 
+  count(PO_NAME, name = "count")
+
+prop_collision_type_per_region_2023 = total_crashes_per_region_2023 |> 
+  inner_join(collision_type_per_region_2023, by = "PO_NAME") |> 
+  mutate(prop = count / total)
+
+# colors
+pal = colorNumeric(
+  palette = "viridis",
+  domain = prop_collision_type_per_region_2023$prop
+)
+
+# map
+cal_zips |> 
+  inner_join(prop_collision_type_per_region_2023, by = "PO_NAME") |> 
   leaflet() |> 
   addProviderTiles("CartoDB.Positron") |> 
-  addCircles(lng = ~POINT_X,
-             lat = ~POINT_Y)
+  addPolygons(weight = 0.9, 
+              label = ~PO_NAME,
+              color = ~pal(prop)) |> 
+  addLegend("bottomleft", pal = pal, values = ~prop)
 ```
 
